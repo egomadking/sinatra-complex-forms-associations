@@ -1,3 +1,51 @@
-<h1>Update Pet</h1>
+<!DOCTYPE html>
+<html>
 
+<head>
 
+  <meta charset="UTF-8">
+
+  <title>TITLE</title>
+
+</head>
+
+<body>
+  <h1>Update Pet <%= @pet.name %></h1>
+  <form action="/pets/<%= @pet[:id] %>" method="post">
+  <input id="hidden" type="hidden" name="_method" value="patch">
+    <div>
+      <label for="pet_name">Name: </label>
+      <input type="text" name="pet[name]" id="pet_name" value="<%= @pet[:name] %>">
+    </div>
+
+    <h2>Existing Owners</h2>
+    <% @owners.each do |owner| %>
+      <div>
+      <label for="<%=owner[:id]%>"><%= owner[:name] %></label>
+      <input  type="radio" 
+              name="pet[owner_id]" 
+              id="<%= owner[:id]%>" 
+              value="<%= owner[:id]%>"
+              <%="checked" if @pet.owner == owner %>>
+      </div>
+    <% end %>
+    <button type="button" onclick="deselect()">De-select all</button>
+
+    <h2>New Owner</h2>
+    <div>
+      <label for="owner_name">Owner Name: </label>
+      <input type="text" name="owner[name]" id="owner_name">
+    </div>
+    <br>
+    <div><button type="submit">Update Pet</button></div>
+  </form>
+  <script>
+    function deselect(){
+      let inputs = Array.from(document.getElementsByTagName("input"))
+      let checkboxes = inputs.filter( i => i.type == "radio")
+      checkboxes.forEach( i => i.checked = false)
+    }
+  </script>
+</body>
+
+</html>
